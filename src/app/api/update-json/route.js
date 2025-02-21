@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import fs from "fs/promises";
 import path from "path";
 
@@ -21,7 +21,8 @@ export async function POST(req) {
     // ✅ 1️⃣ Read the existing local JSON file
     const localPath = path.join(process.cwd(), FILE_PATH);
     const fileContent = await fs.readFile(localPath, "utf-8");
-    let jsonData = JSON.parse(fileContent);
+    const jsonData = fileContent.trim() ? JSON.parse(fileContent) : {};
+
 
     // ✅ 2️⃣ Append some random test data
     jsonData.testData = `Random value: ${Math.random().toString(36).substring(7)}`;
